@@ -104,7 +104,15 @@ function script()
 
             var x = pointer.getX();
             var y = pointer.getY();
-            
+            if (x<0.55 && x>0.45)
+            {
+                x = 0.5;
+            }
+            if (y<0.55 && y>0.45)
+            {
+                y = 0.5;
+            }
+
             var xToSend = Mobilizing.math.map(x, 0,canvasSize.width, -150, 150 );
             var yToSend = Mobilizing.math.map(y, 0,canvasSize.height, -150, 150 );
             
