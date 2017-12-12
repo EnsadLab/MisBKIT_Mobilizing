@@ -64,7 +64,7 @@ function script()
                 console.log("trackpad " + t.message + " " + t.currenty);
                 //this.genericClient.pubsub.publish(t.message, data);
                 //console.log("publish " , t.message, data)
-                oscSocket.send("/mbk/motors/speed",[t.message,val]);
+                oscSocket.send("/mbk/motors/goal",[t.message,val]);
             }
             else
             {
