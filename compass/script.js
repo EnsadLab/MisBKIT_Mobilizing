@@ -18,7 +18,7 @@ function script()
     var touch;
     var mouse;
     var pointer;
-    
+
     var canvasSize;
 
     var misBKIT_url = "ws://10.0.0.12:8080"; //MisBKit server URL : replace it if needed
@@ -35,9 +35,9 @@ function script()
         var addr = msg.address;
         var val1  = msg.args[0];
         var val2  = msg.args[1];
-        
+
         console.log("oscMsg:",addr,msg.args);
-        
+
         /*if(addr.startsWith("/mbk/sensor")){
             // arg[0] = sensor name
             // arg[1] = normalized value [0.0,1.0]
@@ -85,7 +85,7 @@ function script()
         pointer.add(mouse);
         pointer.setup();
         pointer.on();
-        
+
         orientation = new Mobilizing.input.Orientation();
         M.addComponent(orientation);
         orientation.setup();
@@ -101,23 +101,27 @@ function script()
         //connect to the MisBKit server
         oscSocket = new OSCsocket(this,misBKIT_url);
 
-
-
     };
 
     this.update = function()
     {
-        orientation.updateDeviceRotationMatrix();
-        var compass = orientation.deviceHeading;
-        console.log("compass=" + compass);
+
+        var compass = orientation.compass.heading;
+
         if(pointer.getState())
         {
+
             //console.log("Mobilizing.math.RadToDeg="+Mobilizing.math.radTodeg);
-            var compass_deg = compass*180/Math.PI;
+            /*var compass_deg = compass*180/Math.PI;
+            var compass_deg = compass;
             if (compass_deg >180)
             compass_deg -= 360;
-            var pos = (compass_deg);
-            oscSocket.send("/mbk/motors/posN",[0,pos]);
+            var pos = (compass_deg);*/
+
+            var mappedCompass = Mobilizing.math.map(compass, 0,360, -150,150);
+            console.log("compass = " + mappedCompass);
+
+            oscSocket.send("/mbk/motors/posN",[0,mappedCompass]);
         }       
     };
 
