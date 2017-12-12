@@ -30,23 +30,18 @@ function script()
         var addr = msg.address;
         var val1  = msg.args[0];
         var val2  = msg.args[1];
-        //console.log("oscMsg:",addr,msg.args);
-        if(addr.startsWith("/mbk/sensor")){
-            // arg[0] = sensor name
-            // arg[1] = normalized value [0.0,1.0]
-        }
-        if(addr.startsWith("/mbk/temperature")){
-            // arg[0] = index motor
-            // arg[1] = temperature °C
-        }
-        if (addr.startsWith("/mbk/sensor/MotorSensor"))
+        console.log("oscMsg:",addr,msg.args);
+
+        if (addr.startsWith("/mbk/sensor"))
         {
             //move cube on motor mouvement :
            // oscSocket.send("/mbk/motors/wheelmode",[0]);
-            var angles = cube.transform.getLocalRotation();
-            angles.y = (val2*300)/2;
-            console.log("motor angle :"+angles.y);
-            cube.transform.setLocalRotation(angles);    
+           if(msg.args[0] == "MotorSensor") {
+            	var angles = cube.transform.getLocalRotation();
+            	angles.y = (val2*300)/2;
+            	console.log("motor angle :"+angles.y);
+            	cube.transform.setLocalRotation(angles);   
+            } 
         }
     }
 
