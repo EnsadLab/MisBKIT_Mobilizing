@@ -90,8 +90,14 @@ function script()
 
         //create your scene here :
         cube = new Mobilizing.Mesh({primitive:"cube", size:1});
-        cube.transform.setLocalPosition(0,0,0);
+        cube.transform.setLocalPosition(0,0,-10);
+        cube.transform.setLocalScale(1,100,1);
         R.addToCurrentScene(cube);
+
+        var cube2 = new Mobilizing.Mesh({primitive:"cube", size:1});
+        cube2.transform.setLocalPosition(0,0,-10);
+        cube2.transform.setLocalScale(100,1,1);
+        R.addToCurrentScene(cube2);
 
         //connect to the MisBKit server
         oscSocket = new OSCsocket(this,misBKIT_url);
@@ -136,8 +142,8 @@ function script()
             /* 'wheelmode' */
             //oscSocket.send("/mbk/motors/wheelmode",[0]);
 
-            cube.transform.setLocalRotationY(xToSend);
-            cube.transform.setLocalRotationX(yToSend);
+            //cube.transform.setLocalRotationY(xToSend);
+            //cube.transform.setLocalRotationX(yToSend);
         }       
     };
 
