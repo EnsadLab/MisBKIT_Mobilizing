@@ -17,8 +17,10 @@ function script()
 
     var R; //renderer
     var mouse;
+    var touch;
 
-    var misBKIT_url = "ws://127.0.0.1:8080";
+    //var misBKIT_url = "ws://127.0.0.1:8080";
+    var misBKIT_url = "ws://10.0.0.5:8080";
     var oscSocket;
     
     this.preLoad = function(loader)
@@ -29,9 +31,18 @@ function script()
     // reception des messages OSC : { address, args[] }
     this.oscMsg = function(msg){
         var addr = msg.address;
-        var val  = msg.args[0];
-        console.log("oscMsg:",addr,val);
+        //var val  = msg.args[0];
+        console.log("oscMsg:",addr,msg.args);
+        if(addr.startsWith("/mbk/sensor")){
+            // arg[0] = sensor name
+            // arg[1] = normalized value [0.0,1.0]
+        }
+        if(addr.startsWith("/mbk/temperature")){
+            // arg[0] = index motor
+            // arg[1] = temperature °C
+        }
     }
+    //TODO onReady onClose --> visu
 
     this.setup = function()
     {
@@ -54,6 +65,12 @@ function script()
         mouse.on();
         M.addComponent(mouse);
 
+        touch = M.addComponent(new Mobilizing.input.Touch({"target": R.canvas}));
+        touch.setup();
+        touch.on();
+
+
+
         oscSocket = new OSCsocket(this,"ws://127.0.0.1:8080");
    };
 
@@ -61,19 +78,44 @@ function script()
     {
         if( mouse.isPressed() ){
             var x = mouse.getX();
-            var s = R.getCanvasSize();         //peut être 'resizé'
-            var a = ( x/s.width - 0.5 )*300;   //AX12: [-150°,150°]
-            console.log("angle",a);
+            var n = x / R.getCanvasSize().width;         //peut être 'resizé'
+            var a = n*300;   //AX12: [-150°,150°]
+            console.log("cmd",n,a);
 
-            oscSocket.sendValue("/mbk/motors/goal/0",a);
-
-            //var v = ( x/s.width - 0.5 )*200; //speed [-100,100]
-            //oscSocket.sendValue("/mbk/motors/goal/0",a);
+            /* 'angle' 'pos' 'joint' equivalents en degrés */
+            //oscSocket.send("/mbk/motors/angle/0",[a]); //valide            
+            //oscSocket.send("/mbk/motors/angle",[0,a]); //valide
             
+            /* 'speed' ou 'wheel' vitesse [-100,100] */
+            //oscSocket.send("/mbk/motors/angle",[0,a]);
+
+            /* 'posN' position normalisée entre min et max [-1,1] */
+            oscSocket.send("/mbk/motors/posN",[0,n]);
+
+            /* 'speedN' vitesse normalisée entre min et max [-1,1] */
+            //oscSocket.send("/mbk/motors/speedN",[0,n]);
+            
+            /* 'jointmode' */
+            //oscSocket.send("/mbk/motors/jointmode",[0]);
+            
+            /* 'wheelmode' */
+            //oscSocket.send("/mbk/motors/wheelmode",[0]);
+              
             var angles = cube.transform.getLocalRotation();
             angles.y = a;
             cube.transform.setLocalRotation(angles);            
         }
+
+        /*
+        //if(touch.isPressed()){
+            var y = touch.getX(0);
+            var s = R.getCanvasSize();         //peut être 'resizé'
+            var a =(y/s.heigth - 0.5)*300;
+            var angles = cube.transform.getLocalRotation();
+            angles.y = a;
+            cube.transform.setLocalRotation(angles);                        
+        //}
+        */        
 
     };
 
