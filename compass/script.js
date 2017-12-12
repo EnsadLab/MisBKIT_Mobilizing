@@ -21,9 +21,9 @@ function script()
     
     var canvasSize;
 
-    var misBKIT_url = "ws://10.0.0.11:8080"; //MisBKit server URL : replace it if needed
+    var misBKIT_url = "ws://10.0.0.12:8080"; //MisBKit server URL : replace it if needed
     var oscSocket; //OSC Socket
-
+    var orientation;
     this.preLoad = function(loader)
     {
         M = this.getContext();        
@@ -86,64 +86,38 @@ function script()
         pointer.setup();
         pointer.on();
         
+        orientation = new Mobilizing.input.Orientation();
+        M.addComponent(orientation);
+        orientation.setup();
+        orientation.on();
+
         canvasSize = R.getCanvasSize();
 
         //create your scene here :
         cube = new Mobilizing.Mesh({primitive:"cube", size:1});
-        cube.transform.setLocalPosition(0,0,-10);
-        cube.transform.setLocalScale(1,100,1);
+        cube.transform.setLocalPosition(0,0,0);
         R.addToCurrentScene(cube);
-
-        var cube2 = new Mobilizing.Mesh({primitive:"cube", size:1});
-        cube2.transform.setLocalPosition(0,0,-10);
-        cube2.transform.setLocalScale(100,1,1);
-        R.addToCurrentScene(cube2);
 
         //connect to the MisBKit server
         oscSocket = new OSCsocket(this,misBKIT_url);
+
+
 
     };
 
     this.update = function()
     {
-        if(pointer.getState()){
-
-            var x = pointer.getX();
-            var y = pointer.getY();
-            if (x<0.60 && x>0.40)
-            {
-                x = 0.5;
-            }
-            if (y<0.60 && y>0.40)
-            {
-                y = 0.5;
-            }
-
-            var xToSend = Mobilizing.math.map(x, 0,canvasSize.width, -150, 150 );
-            var yToSend = Mobilizing.math.map(y, 0,canvasSize.height, -150, 150 );
-            
-            /* 'angle' 'pos' 'joint' equivalents en degrés */
-            //oscSocket.send("/mbk/motors/angle/0",[a]); //valide            
-            //oscSocket.send("/mbk/motors/angle",[0,a]); //valide
-
-            /* 'speed' ou 'wheel' vitesse [-100,100] */
-            //oscSocket.send("/mbk/motors/angle",[0,a]);
-
-            /* 'posN' position normalisée entre min et max [-1,1] */
-            oscSocket.send("/mbk/motors/posN",[0,xToSend]);
-            oscSocket.send("/mbk/motors/posN",[1,yToSend]);
-
-            /* 'speedN' vitesse normalisée entre min et max [-1,1] */
-            //oscSocket.send("/mbk/motors/speedN",[0,n]);
-
-            /* 'jointmode' */
-            //oscSocket.send("/mbk/motors/jointmode",[0]);
-
-            /* 'wheelmode' */
-            //oscSocket.send("/mbk/motors/wheelmode",[0]);
-
-            //cube.transform.setLocalRotationY(xToSend);
-            //cube.transform.setLocalRotationX(yToSend);
+        orientation.updateDeviceRotationMatrix();
+        var compass = orientation.deviceHeading;
+        console.log("compass=" + compass);
+        if(pointer.getState())
+        {
+            //console.log("Mobilizing.math.RadToDeg="+Mobilizing.math.radTodeg);
+            var compass_deg = compass*180/Math.PI;
+            if (compass_deg >180)
+            compass_deg -= 360;
+            var pos = (compass_deg);
+            oscSocket.send("/mbk/motors/posN",[0,pos]);
         }       
     };
 
