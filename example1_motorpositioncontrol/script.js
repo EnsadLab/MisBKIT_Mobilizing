@@ -74,7 +74,7 @@ function script()
         //horizontal mouse 
         if(pointer.getState())
         {
-            var x = mouse.getX();
+            var x = pointer.getX();
             var n = x / R.getCanvasSize().width;         //peut être 'resizé'
             var a = n*300;   //AX12: [-150°,150°]
             console.log("cmd",n,a);
