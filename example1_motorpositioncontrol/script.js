@@ -57,6 +57,13 @@ function script()
         touch.setup();
         touch.on();
 
+        pointer = new Mobilizing.Pointer();
+        M.addComponent(pointer);
+        pointer.add(touch);
+        pointer.add(mouse);
+        pointer.setup();
+        pointer.on();
+
         //connect to the MisBKit server
         oscSocket = new OSCsocket(this,misBKIT_url);
 
@@ -65,7 +72,7 @@ function script()
     this.update = function()
     {
         //horizontal mouse 
-        if( mouse.isPressed() )
+        if(pointer.getState())
         {
             var x = mouse.getX();
             var n = x / R.getCanvasSize().width;         //peut être 'resizé'
