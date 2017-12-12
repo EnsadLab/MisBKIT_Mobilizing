@@ -112,9 +112,11 @@ function script()
         console.log("compass=" + compass);
         if(pointer.getState())
         {
-            if (compass >180)
-                compass -= 360;
-            var pos = (compass);
+            //console.log("Mobilizing.math.RadToDeg="+Mobilizing.math.radTodeg);
+            var compass_deg = compass*180/Math.PI;
+            if (compass_deg >180)
+            compass_deg -= 360;
+            var pos = (compass_deg);
             oscSocket.send("/mbk/motors/posN",[0,pos]);
         }       
     };
