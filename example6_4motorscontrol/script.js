@@ -68,9 +68,9 @@ function script()
             }
             else
             {
-                t.currentx = 0;
-                t.currenty = 0;
-                oscSocket.send("/mbk/motors/speed",[t.message,0]);
+                //t.currentx = 0;
+                //t.currenty = 0;
+                //oscSocket.send("/mbk/motors/speed",[t.message,0]);
             }
         }
     };
