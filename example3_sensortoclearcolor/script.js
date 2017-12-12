@@ -63,6 +63,13 @@ function script()
         touch.setup();
         touch.on();
 
+        pointer = new Mobilizing.Pointer();
+        M.addComponent(pointer);
+        pointer.add(touch);
+        pointer.add(mouse);
+        pointer.setup();
+        pointer.on();
+
         //connect to the MisBKit server
         oscSocket = new OSCsocket(this,misBKIT_url);
 
