@@ -53,7 +53,7 @@ function script()
         }
         
         //connect to the MisBKit server
-        //oscSocket = new OSCsocket(this,misBKIT_url);
+        oscSocket = new OSCsocket(this,misBKIT_url);
     };
 
     this.update = function()
@@ -75,10 +75,10 @@ function script()
 
                 var val = (t.lastposy-0.5)*t.multiplier;
                 //val = t.currenty;
-                console.log("trackpad ", t, data);
+                //console.log("trackpad ", t, data);
                 //this.genericClient.pubsub.publish(t.message, data);
                 //console.log("publish " , t.message, data)
-                //oscSocket.send("/mbk/motors/goal",[t.message,val]);
+                oscSocket.send("/mbk/motors/pos",[t.message,val]);
             }
             else
             {
