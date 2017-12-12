@@ -15,6 +15,7 @@ function script()
     var light;
     var R;
     var accel;
+    var smoothedAccel = {x:0, y:0};
     var cube;
 
     var misBKIT_url = "ws://10.0.0.12:8080"; //MisBKit server URL : replace it if needed
@@ -70,21 +71,24 @@ function script()
     this.accelEvent = function(acc){
 
         //console.log(acc);
+        
+        smoothedAccel.x = Mobilizing.math.lerp(smoothedAccel.x, acc.x, .1);
+        smoothedAccel.y = Mobilizing.math.lerp(smoothedAccel.y, acc.y, .1);
 
-        var x = Mobilizing.math.map(acc.x, -10,10, 180, -180);
-        var y = Mobilizing.math.map(acc.y, -10,10, 180, -180);
+        var x = Mobilizing.math.map(smoothedAccel.x, -10,10, 180, -180);
+        var y = Mobilizing.math.map(smoothedAccel.y, -10,10, 180, -180);
 
         brick.transform.setLocalRotationY(x);
         brick.transform.setLocalRotationX(y);
 
-        var dx = acc.x * 60;
-        var dy = acc.y * 60;
+        var dx = smoothedAccel.x * 20;
+        var dy = smoothedAccel.y * 20;
 
         var left = dy - dx;
         var right = dy + dx;
 
-        oscSocket.send("/mbk/motors/speed",[0,left*600]);
-        oscSocket.send("/mbk/motors/speed",[1,right*600]);
+        oscSocket.send("/mbk/motors/speed",[0,left]);
+        oscSocket.send("/mbk/motors/speed",[1,right]);
     }
 
     this.update = function()
