@@ -20,7 +20,7 @@ function script()
     var touch;
 
     //var misBKIT_url = "ws://127.0.0.1:8080";
-    var misBKIT_url = "ws://10.0.0.5:8080";
+    var misBKIT_url = "ws://10.0.0.11:8080";
     var oscSocket;
     
     this.preLoad = function(loader)
@@ -71,7 +71,7 @@ function script()
 
 
 
-        oscSocket = new OSCsocket(this,"ws://127.0.0.1:8080");
+        oscSocket = new OSCsocket(this,misBKIT_url);
    };
 
     this.update = function()
