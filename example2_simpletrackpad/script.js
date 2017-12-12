@@ -21,7 +21,7 @@ function script()
     
     var canvasSize;
 
-    var misBKIT_url = "ws://10.0.0.6:8080"; //MisBKit server URL : replace it if needed
+    var misBKIT_url = "ws://10.0.0.11:8080"; //MisBKit server URL : replace it if needed
     var oscSocket; //OSC Socket
 
     this.preLoad = function(loader)
