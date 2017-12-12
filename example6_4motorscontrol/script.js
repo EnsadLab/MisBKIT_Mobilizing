@@ -9,7 +9,7 @@
 
 function script()
 {
-    var misBKIT_url     = "ws://10.0.0.12:8080"; //MisBKit server URL : replace it if needed
+    var misBKIT_url = "ws://10.0.0.11:8080"; //MisBKit server URL : replace it if needed
     var oscSocket; //OSC Socket
     var trackpads       = [];
     

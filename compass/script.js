@@ -107,13 +107,15 @@ function script()
 
     this.update = function()
     {
-        orientation.updateDeviceRotationMatrix();
-        var compass = orientation.deviceHeading;
-        console.log("compass=" + compass);
+        
+        var compass = orientation.compass.heading;
+        
+        //console.log("compass = " + compass);
+        
         if(pointer.getState())
         {
             //console.log("Mobilizing.math.RadToDeg="+Mobilizing.math.radTodeg);
-            var compass_deg = compass*180/Math.PI;
+            //var compass_deg = compass*180/Math.PI;
             if (compass_deg >180)
             compass_deg -= 360;
             var pos = (compass_deg);
