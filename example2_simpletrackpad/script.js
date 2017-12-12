@@ -104,11 +104,11 @@ function script()
 
             var x = pointer.getX();
             var y = pointer.getY();
-            if (x<0.55 && x>0.45)
+            if (x<0.60 && x>0.40)
             {
                 x = 0.5;
             }
-            if (y<0.55 && y>0.45)
+            if (y<0.60 && y>0.40)
             {
                 y = 0.5;
             }
