@@ -63,6 +63,7 @@ function script()
             var t = trackpads[i];
             
             t.update();
+            
             if (t.pressed)
             {
                 var data = {};

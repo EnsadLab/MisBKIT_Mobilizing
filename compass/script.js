@@ -118,7 +118,7 @@ function script()
             compass_deg -= 360;
             var pos = (compass_deg);*/
 
-            var mappedCompass = Mobilizing.math.map(compass, 0,360, -150,150);
+            var mappedCompass = Mobilizing.math.map(compass, 0,360, -1,1);
             console.log("compass = " + mappedCompass);
 
             oscSocket.send("/mbk/motors/posN",[0,mappedCompass]);
