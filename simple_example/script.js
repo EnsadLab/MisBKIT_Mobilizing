@@ -14,11 +14,14 @@ function script()
     var cube; //a simple cube
     var light; //scene light
     var R; //renderer
-    var mouse; //mouse component
-    var touch; //touch component
+
+    var touch;
+    var mouse;
+    var pointer;
+
     var misBKIT_url = "ws://10.0.0.6:8080"; //MisBKit server URL : replace it if needed
     var oscSocket; //OSC Socket
-    
+
     this.preLoad = function(loader)
     {
         M = this.getContext();        
@@ -62,14 +65,22 @@ function script()
         R.addToCurrentScene(light);
         light.setDistance(200);
 
-        mouse = new Mobilizing.input.Mouse({target: R.canvas});
-        mouse.setup();
-        mouse.on();
-        M.addComponent(mouse);
+        touch = new Mobilizing.input.Touch({"target": R.canvas});
+        M.addComponent(touch);
+        touch.setup();//set it up
+        touch.on();//active it
 
-        touch = M.addComponent(new Mobilizing.input.Touch({"target": R.canvas}));
-        touch.setup();
-        touch.on();
+        mouse = new Mobilizing.input.Mouse({"target": R.canvas});
+        M.addComponent(mouse);
+        mouse.setup();//set it up
+        mouse.on();//active it
+
+        pointer = new Mobilizing.Pointer();
+        M.addComponent(pointer);
+        pointer.add(touch);
+        pointer.add(mouse);
+        pointer.setup();
+        pointer.on();
 
         //create your scene here :
         cube = new Mobilizing.Mesh({primitive:"cube", size:1});
@@ -79,20 +90,21 @@ function script()
         //connect to the MisBKit server
         oscSocket = new OSCsocket(this,misBKIT_url);
 
-   };
+    };
 
     this.update = function()
     {
-        if( mouse.isPressed() ){
-            var x = mouse.getX();
-            var n = x / R.getCanvasSize().width;         //peut être 'resizé'
+        if(pointer.getState()){
+
+            var x = pointer.getX();
+            var n = x / R.getCanvasSize().width;//peut être 'resizé'
             var a = n*300;   //AX12: [-150°,150°]
             console.log("cmd",n,a);
 
             /* 'angle' 'pos' 'joint' equivalents en degrés */
             //oscSocket.send("/mbk/motors/angle/0",[a]); //valide            
             //oscSocket.send("/mbk/motors/angle",[0,a]); //valide
-            
+
             /* 'speed' ou 'wheel' vitesse [-100,100] */
             //oscSocket.send("/mbk/motors/angle",[0,a]);
 
@@ -101,13 +113,13 @@ function script()
 
             /* 'speedN' vitesse normalisée entre min et max [-1,1] */
             //oscSocket.send("/mbk/motors/speedN",[0,n]);
-            
+
             /* 'jointmode' */
             //oscSocket.send("/mbk/motors/jointmode",[0]);
-            
+
             /* 'wheelmode' */
             //oscSocket.send("/mbk/motors/wheelmode",[0]);
-              
+
             var angles = cube.transform.getLocalRotation();
             angles.y = a;
             cube.transform.setLocalRotation(angles);            
