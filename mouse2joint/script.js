@@ -19,8 +19,8 @@ function script()
     var mouse;
     var touch;
 
-    //var misBKIT_url = "ws://127.0.0.1:8080";
-    var misBKIT_url = "ws://10.0.0.11:8080";
+    var misBKIT_url = "ws://127.0.0.1:8080";
+    //var misBKIT_url = "ws://10.0.0.11:8080";
     var oscSocket;
     
     this.preLoad = function(loader)
@@ -90,10 +90,10 @@ function script()
             //oscSocket.send("/mbk/motors/angle",[0,a]);
 
             /* 'posN' position normalisée entre min et max [-1,1] */
-            oscSocket.send("/mbk/motors/posN",[0,n]);
+            //oscSocket.send("/mbk/motors/posN",[0,n]);
 
             /* 'speedN' vitesse normalisée entre min et max [-1,1] */
-            //oscSocket.send("/mbk/motors/speedN",[0,n]);
+            oscSocket.send("/mbk/motors/speedN",[0,n]);
             
             /* 'jointmode' */
             //oscSocket.send("/mbk/motors/jointmode",[0]);
