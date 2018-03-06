@@ -160,6 +160,8 @@ EasyContext.CreateTrackpad = function (position, size, message, multiplier) {
             trackpad.message = message;
             trackpad.ignore = false;
             trackpad.multiplier = multiplier;
+            trackpad.lastposx = 0;
+            trackpad.lastposy = 0;
             trackpad.clickable = new Mobilizing.Clickable(
                 {
                     pointer: EasyContext._pointer,

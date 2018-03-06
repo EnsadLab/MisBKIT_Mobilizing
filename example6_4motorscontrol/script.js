@@ -9,10 +9,10 @@
 
 function script()
 {
-    var misBKIT_url     = "ws://10.0.0.12:8080"; //MisBKit server URL : replace it if needed
+    var misBKIT_url = "ws://10.0.0.11:8080"; //MisBKit server URL : replace it if needed
     var oscSocket; //OSC Socket
     var trackpads       = [];
-    
+
     this.preLoad = function(loader)
     {
         M = this.getContext();  
@@ -32,8 +32,7 @@ function script()
     this.setup = function()
     {
         EasyContext.CreateScene(); 
-        //connect to the MisBKit server
-        oscSocket = new OSCsocket(this,misBKIT_url);
+
         //scene creation
         var trackpad_width = 1.8;
         var trackpad_height = 3.8;
@@ -41,14 +40,30 @@ function script()
         trackpads.push(EasyContext.CreateTrackpad(new Mobilizing.Vector3(1, 2, -15), new Mobilizing.Vector3(trackpad_width, trackpad_height, 1), 1, 200));
         trackpads.push(EasyContext.CreateTrackpad(new Mobilizing.Vector3(-1, -2, -15), new Mobilizing.Vector3(trackpad_width, trackpad_height, 1), 2, 200));
         trackpads.push(EasyContext.CreateTrackpad(new Mobilizing.Vector3(1, -2, -15), new Mobilizing.Vector3(trackpad_width, trackpad_height, 1), 3, 200));
-   };
-   
+
+        for (var i in trackpads)
+        {
+            var t = trackpads[i];
+            t.currentx = 0;
+            t.currenty = 0;
+            t.moveX = 0;
+            t.moveY = 0;
+            
+            console.log("trackpad ", t);
+        }
+        
+        //connect to the MisBKit server
+        oscSocket = new OSCsocket(this,misBKIT_url);
+    };
+
     this.update = function()
     {
         for (var i in trackpads)
         {
             var t = trackpads[i];
+            
             t.update();
+            
             if (t.pressed)
             {
                 var data = {};
@@ -61,10 +76,10 @@ function script()
 
                 var val = (t.lastposy-0.5)*t.multiplier;
                 //val = t.currenty;
-                console.log("trackpad " + t.message + " " + t.currenty);
+                //console.log("trackpad ", t, data);
                 //this.genericClient.pubsub.publish(t.message, data);
                 //console.log("publish " , t.message, data)
-                oscSocket.send("/mbk/motors/speed",[t.message,val]);
+                oscSocket.send("/mbk/motors/pos",[t.message,val]);
             }
             else
             {
