@@ -18,7 +18,8 @@ function script()
     var smoothedAccel = {x:0, y:0};
     var cube;
 
-    var misBKIT_url = "ws://10.0.0.12:8080"; //MisBKit server URL : replace it if needed
+    var misBKIT_url; //if undefined then prompt for MisBKit's IP
+    //var misBKIT_url = "ws://10.0.0.12:8080"; //MisBKit server URL : replace it if needed
     var oscSocket; //OSC Socket
 
     this.preLoad = function(loader)

@@ -19,7 +19,7 @@ function script()
     var mouse;
     var touch;
 
-    var misBKIT_url = "ws://127.0.0.1:8080";
+    var misBKIT_url; //if undefined then prompt for MisBKit's IP
     //var misBKIT_url = "ws://10.0.0.11:8080";
     var oscSocket;
     

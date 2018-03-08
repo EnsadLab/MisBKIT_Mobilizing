@@ -16,7 +16,8 @@ function script()
     var R; //renderer
     var mouse; //mouse component
     var touch; //touch component
-    var misBKIT_url = "ws://10.0.0.11:8080"; //MisBKit server URL : replace it if needed
+    var misBKIT_url; //if undefined then prompt for MisBKit's IP
+    //var misBKIT_url = "ws://10.0.0.7:8080"; //force MisBKit server URL
     var oscSocket; //OSC Socket
     
     this.preLoad = function(loader)

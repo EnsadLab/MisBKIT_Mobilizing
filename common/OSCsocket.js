@@ -4,9 +4,9 @@ class OSCsocket{
         this.oscPort;
         this.listener=receiver;
         this.timerReconnect;
-        if(url){
+        //if(url){
             this.open(url);
-        }
+        //}
     }
 
     open(url){
@@ -15,6 +15,15 @@ class OSCsocket{
                 this.oscPort.close();
             }
         }
+        if(url==undefined){
+            var hostIp = location.host;
+            var colon = hostIp.indexOf(':');
+            if(colon>0) hostIp = hostIp.substr(0,colon);
+            var ip = prompt("MisBKIT ip:",hostIp);
+            url = "ws://"+ip+":8080";
+            console.log("userURL:",url);
+        }
+
         this.url = url;
         clearInterval(this.timerReconnect);        
         this.connect();
